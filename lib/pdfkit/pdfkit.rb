@@ -30,7 +30,11 @@ class PDFKit
   end
 
   def command(path = nil)
-    args = [executable]
+    args = []
+    if PDFKit.configuration.xvfb
+      args << 'xvfb-run'
+    end
+    args << executable
     args += @options.to_a.flatten.compact
     args << '--quiet'
 
@@ -41,7 +45,7 @@ class PDFKit
     end
 
     args << (path || '-') # Write to file or stdout
-
+    
     args.map {|arg| %Q{"#{arg.gsub('"', '\"')}"}}
   end
 
